@@ -1,0 +1,26 @@
+<h1>Environments</h1>
+<pre ng-if="isMsg">{{message}}</pre>
+<a href="#/environment/new">Create new environment</a>
+<table id="environments" cellspacing="0" width="100%" datatable="" class="row-border hover">
+	<thead>
+	    <tr>
+	      <th>Name</th>
+	      <th></th>
+	    </tr>
+  	</thead>
+  	<!--<tfoot>
+	    <tr>
+	      <th>Name</th>
+	      <th></th>
+	    </tr>
+  	</tfoot>-->
+	<tbody>
+		<tr ng-repeat="environment in environments" >
+			<td>{{environment.name | capitalize}}</td>
+			<td>
+				<a href="javascript:void(0)" class="btn btn-primary">Edit</a>
+				<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteEnvironment(environment.id, environment.name)">Delete</a>
+			</td>
+		</tr>			
+	</tbody>
+</table>

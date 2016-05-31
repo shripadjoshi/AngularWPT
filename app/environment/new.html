@@ -1,0 +1,39 @@
+<fieldset>
+<pre ng-if="isMsg">{{message}}</pre>
+<legend><h1>Create Environment</h1></legend>
+ <div class="container-fluid">
+    <form id="create-environment-form" name="createEnvironment">
+    
+        <!-- N A M E -->
+
+
+        <div class="control-group form-group col-md-12" ng-class="{'has-error':createEnvironment.name.$invalid && createEnvironment.name.$dirty}">
+          <label>Name</label>
+
+          <!-- For this input field make it required, and have a max length of 25 -->
+          <input type="text" class="form-control" placeholder="e.g. Production" name="name" ng-model="createEnvironmentForm.name" ng-maxlength="50" required>
+
+
+          <span class="help-block has-error" ng-if="createEnvironment.name.$dirty">
+            <span ng-show="createEnvironment.name.$error.required">Name is required.</span>
+            <span ng-show="createEnvironment.name.$error.maxlength">The name cannot be more than 50 characters.</span>
+          </span>
+        </div>
+
+        <!-- Disable signup button until the form has no errors -->
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createEnvironment.$invalid" ng-click="createNewEnvironment()">
+        <span ng-hide="createEnvironmentForm.loading">Create Environment</span>
+        <span class="overlord-loading-spinner fa fa-spinner" ng-show="createEnvironmentForm.loading" ></span>
+        <span ng-show="createEnvironmentForm.loading">Preparing your new environment...</span>
+      </button>
+
+      <!--<input type="hidden" name="_csrf" value="<%= _csrf %>" />-->
+
+    </form>
+ </div>
+ </fieldset> 
+
+<!-- <input id="submit-new-url" type="submit" value="Submit" style="width: 100px;float: left;margin-top: 10px;" class="btn btn-primary" ng-click="createUrl()" ng-disabled="urlForm.$invalid || !isValidURL || isURLExist || isScripted" ng-show="displaySubmitButton">
+
+ ng-submit="createEnvironment()"  
+ -->
