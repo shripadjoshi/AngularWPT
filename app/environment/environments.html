@@ -18,7 +18,7 @@
 		<tr ng-repeat="environment in environments" >
 			<td>{{environment.name | capitalize}}</td>
 			<td>
-				<a href="javascript:void(0)" class="btn btn-primary">Edit</a>
+				<a href="#/environment/edit/{{environment.id}}" class="btn btn-primary">Edit</a>
 				<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteEnvironment(environment.id, environment.name)">Delete</a>
 			</td>
 		</tr>			

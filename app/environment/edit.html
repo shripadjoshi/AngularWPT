@@ -1,0 +1,39 @@
+<fieldset>
+<pre ng-if="isMsg">{{message}}</pre>
+<legend><h1>Edit Environment</h1></legend>
+ <div class="container-fluid">
+    <form id="edit-environment-form" name="editEnvironment">
+    
+        <!-- N A M E -->
+
+
+        <div class="control-group form-group col-md-12" ng-class="{'has-error':editEnvironment.name.$invalid && editEnvironment.name.$dirty}">
+          <label>Name</label>
+
+          <!-- For this input field make it required, and have a max length of 25 -->
+          <input type="text" class="form-control" placeholder="e.g. Production" name="name" ng-model="selectedEnvironment.name" ng-maxlength="50" required>
+
+
+          <span class="help-block has-error" ng-if="editEnvironment.name.$dirty">
+            <span ng-show="editEnvironment.name.$error.required">Name is required.</span>
+            <span ng-show="editEnvironment.name.$error.maxlength">The name cannot be more than 50 characters.</span>
+          </span>
+        </div>
+
+        <!-- Disable signup button until the form has no errors -->
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editEnvironment.$invalid" ng-click="editEnvironmentDetails(selectedEnvironment.id)">
+        <span ng-hide="environmentForm.loading">Update Environment</span>
+        <span class="overlord-loading-spinner fa fa-spinner" ng-show="environmentForm.loading" ></span>
+        <span ng-show="environmentForm.loading">Updating your environment...</span>
+      </button>
+
+      <!--<input type="hidden" name="_csrf" value="<%= _csrf %>" />-->
+
+    </form>
+ </div>
+ </fieldset> 
+
+<!-- <input id="submit-new-url" type="submit" value="Submit" style="width: 100px;float: left;margin-top: 10px;" class="btn btn-primary" ng-click="createUrl()" ng-disabled="urlForm.$invalid || !isValidURL || isURLExist || isScripted" ng-show="displaySubmitButton">
+
+ ng-submit="editEnvironment()"  
+ -->
