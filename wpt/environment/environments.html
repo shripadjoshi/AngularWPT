@@ -1,5 +1,14 @@
 <h1>Environments</h1>
-<pre ng-if="isMsg">{{message}}</pre>
+<div ng-if="isMsg" class="alert alert-info">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{message}}
+</div>
+
+<div ng-if="isErr" class="alert alert-danger">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{errMessage}}
+</div>
+
 <a href="#/environment/new">Create new environment</a>
 <table id="environments" cellspacing="0" width="100%" datatable="" class="row-border hover">
 	<thead>

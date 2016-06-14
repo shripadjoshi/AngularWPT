@@ -1,5 +1,15 @@
 <fieldset>
-<pre ng-if="isMsg">{{message}}</pre>
+
+<div ng-if="isMsg" class="alert alert-success">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{message}}
+</div>
+
+<div ng-if="isErr" class="alert alert-danger">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{errMessage}}
+</div>
+
 <legend><h1>Create Environment</h1></legend>
  <div class="container-fluid">
     <form id="create-environment-form" name="createEnvironment">
@@ -11,17 +21,18 @@
           <label>Name</label>
 
           <!-- For this input field make it required, and have a max length of 25 -->
-          <input type="text" class="form-control" placeholder="e.g. Production" name="name" ng-model="createEnvironmentForm.name" ng-maxlength="50" required>
+          <input type="text" class="form-control" placeholder="e.g. Production" name="name" ng-model="createEnvironmentForm.name" ng-maxlength="50" required ng-blur="validateEnvironmentExist(createEnvironmentForm.name)">
 
 
           <span class="help-block has-error" ng-if="createEnvironment.name.$dirty">
             <span ng-show="createEnvironment.name.$error.required">Name is required.</span>
             <span ng-show="createEnvironment.name.$error.maxlength">The name cannot be more than 50 characters.</span>
+            <span ng-show="isEnvExist" class="help-block">Environment is already taken.</span>
           </span>
         </div>
 
         <!-- Disable signup button until the form has no errors -->
-      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createEnvironment.$invalid" ng-click="createNewEnvironment()">
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createEnvironment.$invalid || isEnvExist" ng-click="createNewEnvironment()">
         <span ng-hide="createEnvironmentForm.loading">Create Environment</span>
         <span class="overlord-loading-spinner fa fa-spinner" ng-show="createEnvironmentForm.loading" ></span>
         <span ng-show="createEnvironmentForm.loading">Preparing your new environment...</span>

@@ -7,10 +7,8 @@ angular.module('wptApp', [
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider
-  /*.when('/', {
-                templateUrl: '/app/index.html',
+  .when('/', {
+                templateUrl: 'environment/environments.html',
                 controller: 'EnvironmentController',
-
-            })*/
-  .otherwise({redirectTo: '/environments'});
+            });
 }]);
