@@ -20,17 +20,18 @@
           <label>Name</label>
 
           <!-- For this input field make it required, and have a max length of 25 -->
-          <input type="text" class="form-control" placeholder="e.g. Production" name="name" ng-model="selectedEnvironment.name" ng-maxlength="50" required>
+          <input type="text" class="form-control" placeholder="e.g. Production" name="name" ng-model="selectedEnvironment.name" ng-maxlength="50" required ng-blur="validateEnvironmentExist(selectedEnvironment.name)">
 
 
           <span class="help-block has-error" ng-if="editEnvironment.name.$dirty">
             <span ng-show="editEnvironment.name.$error.required">Name is required.</span>
             <span ng-show="editEnvironment.name.$error.maxlength">The name cannot be more than 50 characters.</span>
+            <span ng-show="isEnvExist" class="help-block">Environment is already taken.</span>
           </span>
         </div>
 
         <!-- Disable signup button until the form has no errors -->
-      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editEnvironment.$invalid" ng-click="editEnvironmentDetails(selectedEnvironment.id)">
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editEnvironment.$invalid || isEnvExist" ng-click="editEnvironmentDetails(selectedEnvironment.id)">
         <span ng-hide="environmentForm.loading">Update Environment</span>
         <span class="overlord-loading-spinner fa fa-spinner" ng-show="environmentForm.loading" ></span>
         <span ng-show="environmentForm.loading">Updating your environment...</span>
