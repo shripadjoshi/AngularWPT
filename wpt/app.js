@@ -3,7 +3,8 @@
 // Declare app level module which depends on views, and components
 angular.module('wptApp', [
   'ngRoute',
-  'wptApp.environment'
+  'wptApp.environment',
+  'wptApp.country'
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider
