@@ -8,6 +8,12 @@ angular.module('wptApp.country', ['ngRoute'])
         get: function() {
             return $http.get('http://localhost:1337/country');
         },
+        getCountry: function(countryId) {
+            return $http.get('http://localhost:1337/country/' + countryId);
+        },
+        updateCountry: function(countryId, name) {
+            return $http.put('http://localhost:1337/country/' + countryId, { name: name })
+        },
         deleteCountry: function(countryId) {
             return $http.delete('http://localhost:1337/country/' + countryId)
         },
@@ -35,6 +41,9 @@ angular.module('wptApp.country', ['ngRoute'])
         controller: 'CountryController'
     }).when('/country/new', {
         templateUrl: 'country/new.html',
+        controller: 'CountryController'
+    }).when('/country/edit/:id', {
+        templateUrl: 'country/edit.html',
         controller: 'CountryController'
     });
 }])
@@ -70,6 +79,19 @@ angular.module('wptApp.country', ['ngRoute'])
                 $scope.isErr = true;
             });
 
+        //This method will be used to fill up the edit form
+        if ($routeParams.id != undefined) {
+            CountryDetails.getCountry($routeParams.id)
+                .success(function(countryData) {
+                    $scope.selectedCountry = countryData;
+                }).error(function(err) {
+                    $scope.message = "";
+                    $scope.isMsg = false;
+                    $scope.errMessage = err.message;
+                    $scope.isErr = true;
+                });
+        }
+
         $scope.deleteCountry = function(countryId, name) {
                 CountryDetails.deleteCountry(countryId)
                     .success(function(data) {
@@ -91,6 +113,39 @@ angular.module('wptApp.country', ['ngRoute'])
                         $scope.isErr = true;
                     });
 
+            },
+
+            $scope.editCountryDetails = function(countryId) {
+                $scope.countryForm.loading = true;
+                //var originalCountry = $scope.selectedCountry.name;
+                CountryDetails.updateCountry(countryId, $scope.selectedCountry.name)
+                    .success(function(data) {
+                        $scope.isMsg = true;
+                        $scope.message = $filter('capitalize')($scope.selectedCountry.name) + " country successfully updated";
+                        $scope.countryForm.loading = false;
+                        //var allCont = $scope.allCountries;
+                        //console.log(originalCountry);
+                        //console.log($.inArray(originalCountry, allCont));
+                        CountryDetails.get()
+                            .success(function(data) {
+                                $scope.countries = data;
+                                var allCount = [];
+                                angular.forEach($scope.countries, function(obj) {
+                                    allCount.push(obj.name);
+                                });
+                                $scope.allCountries = allCount;
+                            }).error(function(err) {
+                                $scope.message = "";
+                                $scope.isMsg = false;
+                                $scope.errMessage = err.message;
+                                $scope.isErr = true;
+                            });
+                    }).error(function(err) {
+                        $scope.message = "";
+                        $scope.isMsg = false;
+                        $scope.errMessage = err.message;
+                        $scope.isErr = true;
+                    });
             },
 
             //This will check the Country already present or not
@@ -121,6 +176,8 @@ angular.module('wptApp.country', ['ngRoute'])
                         $scope.isErr = true;
                     });
             }
+
+
 
     }
 

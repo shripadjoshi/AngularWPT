@@ -56,22 +56,22 @@ angular.module('wptApp.environment', ['ngRoute'])
                 loading: false
             },
 
-        $scope.selectedEnvironment = "",
-        //This will fetch all the available environments
-        EnvironmentDetails.get()
-        .success(function(data) {
-            $scope.environments = data;
-            var allEnvs = [];
-            angular.forEach($scope.environments, function(obj) {
-                        allEnvs.push(obj.name);                        
-                        });
-        $scope.allEnvironments = allEnvs;        
-        }).error(function(err) {
-            $scope.message = "";
-            $scope.isMsg = false;
-            $scope.errMessage = err.message;
-            $scope.isErr = true;
-        });
+            $scope.selectedEnvironment = "",
+            //This will fetch all the available environments
+            EnvironmentDetails.get()
+            .success(function(data) {
+                $scope.environments = data;
+                var allEnvs = [];
+                angular.forEach($scope.environments, function(obj) {
+                    allEnvs.push(obj.name);
+                });
+                $scope.allEnvironments = allEnvs;
+            }).error(function(err) {
+                $scope.message = "";
+                $scope.isMsg = false;
+                $scope.errMessage = err.message;
+                $scope.isErr = true;
+            });
 
         //This method will be used to fill up the edit form
         if ($routeParams.id != undefined) {
@@ -87,15 +87,14 @@ angular.module('wptApp.environment', ['ngRoute'])
         }
 
         //This will check the Environment already present or not
-        
-       $scope.validateEnvironmentExist = function(envName) {
-                    if ($scope.allEnvironments.indexOf(envName) > -1){
-                        $scope.isEnvExist = true;                    
-                    }
-                    else{
-                        $scope.isEnvExist = false;
-                    }
-                };
+
+        $scope.validateEnvironmentExist = function(envName) {
+            if ($scope.allEnvironments.indexOf(envName) > -1) {
+                $scope.isEnvExist = true;
+            } else {
+                $scope.isEnvExist = false;
+            }
+        };
 
         //This method will create new environment
         $scope.createNewEnvironment = function() {
@@ -145,6 +144,20 @@ angular.module('wptApp.environment', ['ngRoute'])
                         $scope.isMsg = true;
                         $scope.message = $filter('capitalize')($scope.selectedEnvironment.name) + " environment successfully updated";
                         $scope.environmentForm.loading = false;
+                        EnvironmentDetails.get()
+                            .success(function(data) {
+                                $scope.environments = data;
+                                var allEnvs = [];
+                                angular.forEach($scope.environments, function(obj) {
+                                    allEnvs.push(obj.name);
+                                });
+                                $scope.allEnvironments = allEnvs;
+                            }).error(function(err) {
+                                $scope.message = "";
+                                $scope.isMsg = false;
+                                $scope.errMessage = err.message;
+                                $scope.isErr = true;
+                            });
                     }).error(function(err) {
                         $scope.message = "";
                         $scope.isMsg = false;
