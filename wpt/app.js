@@ -4,7 +4,8 @@
 angular.module('wptApp', [
   'ngRoute',
   'wptApp.environment',
-  'wptApp.country'
+  'wptApp.country',
+  'wptApp.category'
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider

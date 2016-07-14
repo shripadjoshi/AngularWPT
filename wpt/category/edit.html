@@ -1,0 +1,44 @@
+<fieldset>
+<div ng-if="isMsg" class="alert alert-success">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{message}}
+</div>
+
+<div ng-if="isErr" class="alert alert-danger">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{errMessage}}
+</div>
+
+<legend><h1>Edit Category</h1></legend>
+ <div class="container-fluid">
+    <form id="edit-category-form" name="editCategory">
+    
+        <!-- N A M E -->
+
+
+        <div class="control-group form-group col-md-12" ng-class="{'has-error':editCategory.name.$invalid && editCategory.name.$dirty}">
+          <label>Name</label>
+
+          <!-- For this input field make it required, and have a max length of 25 -->
+          <input type="text" class="form-control" placeholder="e.g. India" name="name" ng-model="selectedCategory.name" ng-maxlength="100" required ng-blur="validateCategoryExist(selectedCategory.name)">
+
+
+          <span class="help-block has-error" ng-if="editCategory.name.$dirty">
+            <span ng-show="editCategory.name.$error.required">Name is required.</span>
+            <span ng-show="editCategory.name.$error.maxlength">The name cannot be more than 100 characters.</span>
+            <span ng-show="isCategoryExist" class="help-block">Category is already taken.</span>
+          </span>
+        </div>
+
+        <!-- Disable signup button until the form has no errors -->
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editCategory.$invalid || isCategoryExist" ng-click="editCategoryDetails(selectedCategory.id)">
+        <span ng-hide="categoryForm.loading">Update Category</span>
+        <span class="overlord-loading-spinner fa fa-spinner" ng-show="categoryForm.loading" ></span>
+        <span ng-show="categoryForm.loading">Updating your category...</span>
+      </button>
+
+      <!--<input type="hidden" name="_csrf" value="<%= _csrf %>" />-->
+
+    </form>
+ </div>
+ </fieldset> 

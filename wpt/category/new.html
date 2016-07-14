@@ -1,0 +1,42 @@
+<fieldset>
+
+<div ng-if="isMsg" class="alert alert-success">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{message}}
+</div>
+
+<div ng-if="isErr" class="alert alert-danger">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{errMessage}}
+</div>
+
+<legend><h1>Create Category</h1></legend>
+ <div class="container-fluid">
+    <form id="create-category-form" name="createCategory">
+    
+        <!-- N A M E -->
+
+
+        <div class="control-group form-group col-md-12" ng-class="{'has-error':createCategory.name.$invalid && createCategory.name.$dirty}">
+          <label>Name</label>
+
+          <!-- For this input field make it required, and have a max length of 25 -->
+          <input type="text" class="form-control" placeholder="e.g. India" name="name" ng-model="createCategoryForm.name" ng-maxlength="100" required ng-blur="validateCategoryExist(createCategoryForm.name)">
+
+
+          <span class="help-block has-error" ng-if="createCategory.name.$dirty">
+            <span ng-show="createCategory.name.$error.required">Name is required.</span>
+            <span ng-show="createCategory.name.$error.maxlength">The name cannot be more than 100 characters.</span>
+            <span ng-show="isCategoryExist" class="help-block">Category is already taken.</span>
+          </span>
+        </div>
+
+        <!-- Disable signup button until the form has no errors -->
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createCategory.$invalid || isCategoryExist" ng-click="createNewCategory()">
+        <span ng-hide="createCategoryForm.loading">Create Category</span>
+        <span class="overlord-loading-spinner fa fa-spinner" ng-show="createCategoryForm.loading" ></span>
+        <span ng-show="createCategoryForm.loading">Preparing your new category...</span>
+      </button>
+    </form>
+ </div>
+ </fieldset> 

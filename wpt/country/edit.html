@@ -31,7 +31,7 @@
         </div>
 
         <!-- Disable signup button until the form has no errors -->
-      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editEnvironment.$invalid || isCountryExist" ng-click="editCountryDetails(selectedCountry.id)">
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editCountry.$invalid || isCountryExist" ng-click="editCountryDetails(selectedCountry.id)">
         <span ng-hide="countryForm.loading">Update Country</span>
         <span class="overlord-loading-spinner fa fa-spinner" ng-show="countryForm.loading" ></span>
         <span ng-show="countryForm.loading">Updating your country...</span>
