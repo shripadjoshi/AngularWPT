@@ -1,0 +1,44 @@
+<fieldset>
+<div ng-if="isMsg" class="alert alert-success">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{message}}
+</div>
+
+<div ng-if="isErr" class="alert alert-danger">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{errMessage}}
+</div>
+
+<legend><h1>Edit Region</h1></legend>
+ <div class="container-fluid">
+    <form id="edit-region-form" name="editRegion">
+    
+        <!-- N A M E -->
+
+
+        <div class="control-group form-group col-md-12" ng-class="{'has-error':editRegion.name.$invalid && editRegion.name.$dirty}">
+          <label>Name</label>
+
+          <!-- For this input field make it required, and have a max length of 25 -->
+          <input type="text" class="form-control" placeholder="e.g. EAST" name="name" ng-model="selectedRegion.name" ng-maxlength="100" required ng-blur="validateRegionExist(selectedRegion.name)">
+
+
+          <span class="help-block has-error" ng-if="editRegion.name.$dirty">
+            <span ng-show="editRegion.name.$error.required">Name is required.</span>
+            <span ng-show="editRegion.name.$error.maxlength">The name cannot be more than 100 characters.</span>
+            <span ng-show="isRegionExist" class="help-block">Region is already taken.</span>
+          </span>
+        </div>
+
+        <!-- Disable signup button until the form has no errors -->
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editRegion.$invalid || isRegionExist" ng-click="editRegionDetails(selectedRegion.id)">
+        <span ng-hide="regionForm.loading">Update Region</span>
+        <span class="overlord-loading-spinner fa fa-spinner" ng-show="regionForm.loading" ></span>
+        <span ng-show="regionForm.loading">Updating your region...</span>
+      </button>
+
+      <!--<input type="hidden" name="_csrf" value="<%= _csrf %>" />-->
+
+    </form>
+ </div>
+ </fieldset> 

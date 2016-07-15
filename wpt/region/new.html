@@ -1,0 +1,42 @@
+<fieldset>
+
+<div ng-if="isMsg" class="alert alert-success">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{message}}
+</div>
+
+<div ng-if="isErr" class="alert alert-danger">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{errMessage}}
+</div>
+
+<legend><h1>Create Region</h1></legend>
+ <div class="container-fluid">
+    <form id="create-region-form" name="createRegion">
+    
+        <!-- N A M E -->
+
+
+        <div class="control-group form-group col-md-12" ng-class="{'has-error':createRegion.name.$invalid && createRegion.name.$dirty}">
+          <label>Name</label>
+
+          <!-- For this input field make it required, and have a max length of 25 -->
+          <input type="text" class="form-control" placeholder="e.g. EAST" name="name" ng-model="createRegionForm.name" ng-maxlength="100" required ng-blur="validateRegionExist(createRegionForm.name)">
+
+
+          <span class="help-block has-error" ng-if="createRegion.name.$dirty">
+            <span ng-show="createRegion.name.$error.required">Name is required.</span>
+            <span ng-show="createRegion.name.$error.maxlength">The name cannot be more than 100 characters.</span>
+            <span ng-show="isRegionExist" class="help-block">Region is already taken.</span>
+          </span>
+        </div>
+
+        <!-- Disable signup button until the form has no errors -->
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createRegion.$invalid || isRegionExist" ng-click="createNewRegion()">
+        <span ng-hide="createRegionForm.loading">Create Region</span>
+        <span class="overlord-loading-spinner fa fa-spinner" ng-show="createRegionForm.loading" ></span>
+        <span ng-show="createRegionForm.loading">Preparing your new region...</span>
+      </button>
+    </form>
+ </div>
+ </fieldset> 
