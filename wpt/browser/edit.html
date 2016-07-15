@@ -1,0 +1,44 @@
+<fieldset>
+<div ng-if="isMsg" class="alert alert-success">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{message}}
+</div>
+
+<div ng-if="isErr" class="alert alert-danger">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{errMessage}}
+</div>
+
+<legend><h1>Edit Browser</h1></legend>
+ <div class="container-fluid">
+    <form id="edit-browser-form" name="editBrowser">
+    
+        <!-- N A M E -->
+
+
+        <div class="control-group form-group col-md-12" ng-class="{'has-error':editBrowser.name.$invalid && editBrowser.name.$dirty}">
+          <label>Name</label>
+
+          <!-- For this input field make it required, and have a max length of 25 -->
+          <input type="text" class="form-control" placeholder="e.g. IE11" name="name" ng-model="selectedBrowser.name" ng-maxlength="100" required ng-blur="validateBrowserExist(selectedBrowser.name)">
+
+
+          <span class="help-block has-error" ng-if="editBrowser.name.$dirty">
+            <span ng-show="editBrowser.name.$error.required">Name is required.</span>
+            <span ng-show="editBrowser.name.$error.maxlength">The name cannot be more than 100 characters.</span>
+            <span ng-show="isBrowserExist" class="help-block">Browser is already taken.</span>
+          </span>
+        </div>
+
+        <!-- Disable signup button until the form has no errors -->
+      <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editBrowser.$invalid || isBrowserExist" ng-click="editBrowserDetails(selectedBrowser.id)">
+        <span ng-hide="browserForm.loading">Update Browser</span>
+        <span class="overlord-loading-spinner fa fa-spinner" ng-show="browserForm.loading" ></span>
+        <span ng-show="browserForm.loading">Updating your browser...</span>
+      </button>
+
+      <!--<input type="hidden" name="_csrf" value="<%= _csrf %>" />-->
+
+    </form>
+ </div>
+ </fieldset> 
