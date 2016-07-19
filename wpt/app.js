@@ -7,7 +7,8 @@ angular.module('wptApp', [
   'wptApp.region',
   'wptApp.category',
   'wptApp.environment',
-  'wptApp.browser'
+  'wptApp.browser',
+  'wptApp.property'
   
 ]).
 config(['$routeProvider', function($routeProvider) {
