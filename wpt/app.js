@@ -8,7 +8,8 @@ angular.module('wptApp', [
   'wptApp.category',
   'wptApp.environment',
   'wptApp.browser',
-  'wptApp.property'
+  'wptApp.property',
+  'wptApp.location'
   
 ]).
 config(['$routeProvider', function($routeProvider) {

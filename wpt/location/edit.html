@@ -1,0 +1,37 @@
+<fieldset>
+    <div ng-if="isMsg" class="alert alert-success">
+        <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{message}}
+    </div>
+    <div ng-if="isErr" class="alert alert-danger">
+        <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{errMessage}}
+    </div>
+    <legend>
+        <h1>Edit Property</h1></legend>
+    <div class="container-fluid">
+        <form id="edit-property-form" name="editProperty">
+            <!-- N A M E -->
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':editProperty.name.$invalid && editProperty.name.$dirty}">
+                <label>Name</label>
+                <!-- For this input field make it required, and have a max length of 25 -->
+                <input type="text" class="form-control" placeholder="e.g. India" name="name" ng-model="selectedProperty.name" ng-maxlength="100" required ng-blur="validatePropertyExist(selectedProperty.name)">
+                <span class="help-block has-error" ng-if="editProperty.name.$dirty">
+            <span ng-show="editProperty.name.$error.required">Name is required.</span>
+                <span ng-show="editProperty.name.$error.maxlength">The name cannot be more than 100 characters.</span>
+                <span ng-show="isPropertyExist" class="help-block">Property is already taken.</span>
+                </span>
+            </div>
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':createProperty.description.$invalid && createProperty.description.$dirty}">
+                <label>Description</label>
+                <!-- For this input field make it required, and have a max length of 25 -->
+                <input type="text" class="form-control" name="description" ng-model="selectedProperty.description">
+            </div>
+            <!-- Disable signup button until the form has no errors -->
+            <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editProperty.$invalid || isPropertyExist" ng-click="editPropertyDetails(selectedProperty.id)">
+                <span ng-hide="propertyForm.loading">Update Property</span>
+                <span class="overlord-loading-spinner fa fa-spinner" ng-show="propertyForm.loading"></span>
+                <span ng-show="propertyForm.loading">Updating your property...</span>
+            </button>
+            <!--<input type="hidden" name="_csrf" value="<%= _csrf %>" />-->
+        </form>
+    </div>
+</fieldset>
