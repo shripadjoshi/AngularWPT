@@ -13,27 +13,55 @@
             <div class="control-group form-group col-md-12" ng-class="{'has-error':createLocation.name.$invalid && createLocation.name.$dirty}">
                 <label>Name</label>
                 <!-- For this input field make it required, and have a max length of 25 -->
-                <input type="text" class="form-control" placeholder="e.g. Location" name="name" ng-model="createLocationForm.name" ng-maxlength="100" required ng-blur="validateLocationExist(createLocationForm.name)">
+                <input type="text" class="form-control" placeholder="e.g. Location" name="name" ng-model="createLocationForm.name" ng-maxlength="100" required ng-blur="validateLocationExist(createLocationForm.name, 'name')">
+                
                 <span class="help-block has-error" ng-if="createLocation.name.$dirty">
             <span ng-show="createLocation.name.$error.required">Name is required.</span>
                 <span ng-show="createLocation.name.$error.maxlength">The name cannot be more than 100 characters.</span>
                 <span ng-show="isLocationExist" class="help-block">Location is already taken.</span>
                 </span>
             </div>
-            
             <div class="control-group form-group col-md-12" ng-class="{'has-error':createLocation.display_name.$invalid && createLocation.dispaly_name.$dirty}">
                 <label>Display Name</label>
                 <!-- For this input field make it required, and have a max length of 25 -->
-                <input type="text" class="form-control" placeholder="e.g. Display Name" name="display_name" ng-model="createLocationForm.display_name" ng-maxlength="100" required ng-blur="validateDisplayNameExist(createLocationForm.display_name)">
+                <input type="text" class="form-control" placeholder="e.g. Display Name" name="display_name" ng-model="createLocationForm.display_name" ng-maxlength="100" required ng-blur="validateLocationExist(createLocationForm.display_name, 'display_name')">
+                
                 <span class="help-block has-error" ng-if="createLocation.display_name.$dirty">
-            <span ng-show="createLocation.display_name.$error.required">Display Name is required.</span>
-                <span ng-show="createLocation.display_name.$error.maxlength">The display name cannot be more than 100 characters.</span>
+            <span ng-show="createLocation.display_name.$error.required" class="help-block">Display Name is required.</span>
+                <span ng-show="createLocation.display_name.$error.maxlength" class="help-block">The display name cannot be more than 100 characters.</span>
                 <span ng-show="isDisplayNameExist" class="help-block">Display Name is already taken.</span>
                 </span>
             </div>
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':createLocation.location_region.$invalid && createLocation.location_region.$dirty}">
+                <label>Region</label>
+                <select ng-model="createLocationForm.location_region" ng-options="region.id as region.name for region in regions" required>
+                    <option value="">Select region</option>
+                </select>
+                <span class="help-block has-error" ng-if="createLocation.location_region.$dirty">
+                    <span ng-show="createLocation.location_region.$error.required">
+                        Region is required.
+                    </span>
+                </span>
+            </div>
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':createLocation.location_browser.$invalid && createLocation.location_browser.$dirty}">
+                <label>Browser</label>
+                <select ng-model="createLocationForm.location_browser" ng-options="browser.id as browser.name for browser in browsers" required>
+                    <option value="">Select browser</option>
+                </select>
+                <span class="help-block has-error" ng-if="createLocation.location_browser.$dirty">
+                    <span ng-show="createLocation.location_browser.$error.required">
+                        Browser is required.
+                    </span>
+                </span>
+            </div>
+
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':createLocation.active.$invalid && createLocation.active.$dirty}">
+                <label>Active</label>
+                <input type="checkbox" ng-model="createLocationForm.active" id="active"  name="active">
+            </div>
             <!-- Disable signup button until the form has no errors -->
             <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createLocation.$invalid || isLocationExist || isDisplayNameExist" ng-click="createNewLocation()">
-                <span ng-hide="LocationForm.loading">Create Location</span>
+                <span ng-hide="locationForm.loading">Create Location</span>
                 <span class="overlord-loading-spinner fa fa-spinner" ng-show="locationForm.loading"></span>
                 <span ng-show="locationForm.loading">Preparing your new location...</span>
             </button>

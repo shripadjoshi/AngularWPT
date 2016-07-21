@@ -14,6 +14,7 @@
 	<thead>
 	    <tr>
 	      <th>Name</th>
+	      <th>Locations</th>
 	      <th></th>
 	    </tr>
   	</thead>
@@ -26,6 +27,7 @@
 	<tbody>
 		<tr ng-repeat="browser in browsers" >
 			<td>{{browser.name | capitalize}}</td>
+			<td>{{browser.locations | joinArrayValues}}</td>
 			<td>
 				<a href="#/browser/edit/{{browser.id}}" class="btn btn-primary">Edit</a>
 				<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteBrowser(browser.id, browser.name)">Delete</a>

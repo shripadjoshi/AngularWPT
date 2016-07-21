@@ -6,30 +6,65 @@
         <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{errMessage}}
     </div>
     <legend>
-        <h1>Edit Property</h1></legend>
+        <h1>Edit Location</h1></legend>
     <div class="container-fluid">
-        <form id="edit-property-form" name="editProperty">
+        <form id="edit-location-form" name="editLocation">
             <!-- N A M E -->
-            <div class="control-group form-group col-md-12" ng-class="{'has-error':editProperty.name.$invalid && editProperty.name.$dirty}">
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':editLocation.name.$invalid && editLocation.name.$dirty}">
                 <label>Name</label>
                 <!-- For this input field make it required, and have a max length of 25 -->
-                <input type="text" class="form-control" placeholder="e.g. India" name="name" ng-model="selectedProperty.name" ng-maxlength="100" required ng-blur="validatePropertyExist(selectedProperty.name)">
-                <span class="help-block has-error" ng-if="editProperty.name.$dirty">
-            <span ng-show="editProperty.name.$error.required">Name is required.</span>
-                <span ng-show="editProperty.name.$error.maxlength">The name cannot be more than 100 characters.</span>
-                <span ng-show="isPropertyExist" class="help-block">Property is already taken.</span>
+                <input type="text" class="form-control" placeholder="e.g. India" name="name" ng-model="selectedLocation.name" ng-maxlength="100" required ng-blur="validateLocationExist(selectedLocation.name, 'name')">
+                <span class="help-block has-error" ng-if="editLocation.name.$dirty">
+            <span ng-show="editLocation.name.$error.required">Name is required.</span>
+                <span ng-show="editLocation.name.$error.maxlength">The name cannot be more than 100 characters.</span>
+                <span ng-show="isLocationExist" class="help-block">Location is already taken.</span>
                 </span>
             </div>
-            <div class="control-group form-group col-md-12" ng-class="{'has-error':createProperty.description.$invalid && createProperty.description.$dirty}">
-                <label>Description</label>
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':editLocation.display_name.$invalid && editLocation.display_name.$dirty}">
+                <label>Display Name</label>
                 <!-- For this input field make it required, and have a max length of 25 -->
-                <input type="text" class="form-control" name="description" ng-model="selectedProperty.description">
+                <input type="text" class="form-control" name="display_name" ng-model="selectedLocation.display_name" ng-maxlength="100" required ng-blur="validateLocationExist(editLocation.display_name, 'display_name')">
+                <span class="help-block has-error" ng-if="editLocation.display_name.$dirty">
+            <span ng-show="editLocation.display_name.$error.required" class="help-block">Display Name is required.</span>
+                <span ng-show="editLocation.display_name.$error.maxlength" class="help-block">The display name cannot be more than 100 characters.</span>
+                <span ng-show="isDisplayNameExist" class="help-block">Display Name is already taken.</span>
+                </span>
             </div>
+
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':editLocation.location_region.$invalid && editLocation.location_region.$dirty}">
+                <label>Region</label>
+                <select ng-model="selectedLocation.location_region.id" ng-options="region.id as region.name for region in regions" required >
+                    <option value="">Select region</option>
+                </select>
+                <span class="help-block has-error" ng-if="editLocation.location_region.$dirty">
+                    <span ng-show="editLocation.location_region.$error.required">
+                        Region is required.
+                    </span>
+                </span>
+            </div>
+
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':editLocation.location_browser.$invalid && editLocation.location_browser.$dirty}">
+                <label>Browser</label>
+                <select ng-model="selectedLocation.location_browser.id" ng-options="browser.id as browser.name for browser in browsers" required >
+                    <option value="">Select browser</option>
+                </select>
+                <span class="help-block has-error" ng-if="editLocation.location_browser.$dirty">
+                    <span ng-show="editLocation.location_browser.$error.required">
+                        Browser is required.
+                    </span>
+                </span>
+            </div>
+
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':editLocation.active.$invalid && editLocation.active.$dirty}">
+                <label>Active</label>
+                <input type="checkbox" ng-model="selectedLocation.active" id="active"  name="active">
+            </div>
+
             <!-- Disable signup button until the form has no errors -->
-            <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editProperty.$invalid || isPropertyExist" ng-click="editPropertyDetails(selectedProperty.id)">
-                <span ng-hide="propertyForm.loading">Update Property</span>
-                <span class="overlord-loading-spinner fa fa-spinner" ng-show="propertyForm.loading"></span>
-                <span ng-show="propertyForm.loading">Updating your property...</span>
+            <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editLocation.$invalid || isLocationExist" ng-click="editLocationDetails(selectedLocation.id)">
+                <span ng-hide="locationForm.loading">Update Location</span>
+                <span class="overlord-loading-spinner fa fa-spinner" ng-show="locationForm.loading"></span>
+                <span ng-show="locationForm.loading">Updating your location...</span>
             </button>
             <!--<input type="hidden" name="_csrf" value="<%= _csrf %>" />-->
         </form>

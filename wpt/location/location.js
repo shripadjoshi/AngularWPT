@@ -6,20 +6,20 @@ angular.module('wptApp.location', ['ngRoute'])
 .factory('LocationDetails', ['$http', function($http) {
     return {
         get: function() {
-            return $http.get('http://localhost:1337/location');
-        }//,
-        /*getProperty: function(propertyId) {
-            return $http.get('http://localhost:1337/property/' + propertyId);
-        },
-        updateProperty: function(propertyId, name, description) {
-            return $http.put('http://localhost:1337/property/' + propertyId, { name: name, description: description })
-        },
-        deleteProperty: function(propertyId) {
-            return $http.delete('http://localhost:1337/property/' + propertyId)
-        },
-        createNewProperty: function(name, description) {
-            return $http.post('http://localhost:1337/property', { name: name, description: description })
-        }*/
+                return $http.get('http://localhost:1337/location');
+            },
+            getLocation: function(locationId) {
+                return $http.get('http://localhost:1337/location/' + locationId);
+            },
+            /*updateProperty: function(propertyId, name, description) {
+                return $http.put('http://localhost:1337/property/' + propertyId, { name: name, description: description })
+            },*/
+            deleteLocation: function(locationId) {
+                return $http.delete('http://localhost:1337/location/' + locationId)
+            },
+            createNewLocation: function(locObject) {
+                return $http.post('http://localhost:1337/location', { name: locObject.name, display_name: locObject.display_name, location_region: locObject.location_region, location_browser: locObject.location_browser, active: (locObject.active ? locObject.active : false) })
+            }
     }
 }])
 
@@ -55,10 +55,10 @@ angular.module('wptApp.location', ['ngRoute'])
         $scope.browsers = "";
         $scope.message = "";
         $scope.errMessage = "";
-        //$scope.allEnvironments = [];
         $scope.isMsg = false;
         $scope.isErr = false;
         $scope.isLocationExist = false;
+        $scope.isDisplayNameExist = false;
         $scope.locationForm = {
                 loading: false
             },
@@ -70,10 +70,13 @@ angular.module('wptApp.location', ['ngRoute'])
             .success(function(data) {
                 $scope.locations = data;
                 var allCount = [];
+                var allDisplayNames = [];
                 angular.forEach($scope.locations, function(obj) {
                     allCount.push(obj.name);
+                    allDisplayNames.push(obj.display_name);
                 });
                 $scope.allLocations = allCount;
+                $scope.allDisplayNames = allDisplayNames;
             }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;
@@ -81,10 +84,10 @@ angular.module('wptApp.location', ['ngRoute'])
                 $scope.isErr = true;
             });
 
-            //This will fetch all the available regions
+        //This will fetch all the available regions
         RegionDetails.get()
             .success(function(data) {
-                $scope.regions = data;                
+                $scope.regions = data;
             }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;
@@ -95,7 +98,7 @@ angular.module('wptApp.location', ['ngRoute'])
         //This will fetch all the available browsers
         BrowserDetails.get()
             .success(function(data) {
-                $scope.browsers = data;                
+                $scope.browsers = data;
             }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;
@@ -104,10 +107,10 @@ angular.module('wptApp.location', ['ngRoute'])
             });
 
         //This method will be used to fill up the edit form
-        /*if ($routeParams.id != undefined) {
-            PropertyDetails.getProperty($routeParams.id)
-                .success(function(propertyData) {
-                    $scope.selectedProperty = propertyData;
+        if ($routeParams.id != undefined) {
+            LocationDetails.getLocation($routeParams.id)
+                .success(function(locationData) {
+                    $scope.selectedLocation = locationData;
                 }).error(function(err) {
                     $scope.message = "";
                     $scope.isMsg = false;
@@ -116,14 +119,14 @@ angular.module('wptApp.location', ['ngRoute'])
                 });
         }
 
-        $scope.deleteProperty = function(propertyId, name) {
-                PropertyDetails.deleteProperty(propertyId)
+        $scope.deleteLocation = function(locationId, name) {
+                LocationDetails.deleteLocation(locationId)
                     .success(function(data) {
-                        PropertyDetails.get()
+                        LocationDetails.get()
                             .success(function(data) {
-                                $scope.properties = data;
+                                $scope.locations = data;
                                 $scope.isMsg = true;
-                                $scope.message = $filter('capitalize')(name) + " property successfully deleted"
+                                $scope.message = $filter('capitalize')(name) + " location successfully deleted"
                             }).error(function(err) {
                                 $scope.message = "";
                                 $scope.isMsg = false;
@@ -139,14 +142,14 @@ angular.module('wptApp.location', ['ngRoute'])
 
             },
 
-            $scope.editPropertyDetails = function(propertyId) {
+            $scope.editLocationDetails = function(propertyId) {
                 $scope.propertyForm.loading = true;
-                PropertyDetails.updateProperty(propertyId, $scope.selectedProperty.name, $scope.selectedProperty.description)
+                LocationDetails.updateLocation(propertyId, $scope.selectedProperty.name, $scope.selectedLocation.description)
                     .success(function(data) {
                         $scope.isMsg = true;
-                        $scope.message = $filter('capitalize')($scope.selectedProperty.name) + " property successfully updated";
+                        $scope.message = $filter('capitalize')($scope.selectedLocation.name) + " property successfully updated";
                         $scope.propertyForm.loading = false;
-                        PropertyDetails.get()
+                        LocationDetails.get()
                             .success(function(data) {
                                 $scope.properties = data;
                                 var allCount = [];
@@ -169,34 +172,43 @@ angular.module('wptApp.location', ['ngRoute'])
             },
 
             //This will check the Property already present or not
-
-            $scope.validatePropertyExist = function(propertyName) {
-                if ($scope.allproperties.indexOf(propertyName) > -1) {
-                    $scope.isPropertyExist = true;
+            
+        $scope.validateLocationExist = function(locationName, field) {
+            if (field == "name") {
+                if ($scope.allLocations.indexOf(locationName) > -1) {
+                    $scope.isLocationExist = true;
                 } else {
-                    $scope.isPropertyExist = false;
+                    $scope.isLocationExist = false;
                 }
-            },
+            } else {
+                if ($scope.allDisplayNames.indexOf(locationName) > -1) {
+                    $scope.isDisplayNameExist = true;
+                } else {
+                    $scope.isDisplayNameExist = false;
+                }
+            }
 
+        },
 
-            //This method will create new property
-            $scope.createNewProperty = function() {
-                $scope.propertyForm.loading = true;
-                PropertyDetails.createNewProperty($scope.createPropertyForm.name, $scope.createPropertyForm.description)
-                    .success(function(data) {
-                        $scope.isMsg = true;
-                        $scope.message = $filter('capitalize')($scope.createPropertyForm.name) + " property successfully created"
-                        $scope.createPropertyForm.name = "";
-                        $scope.createPropertyForm.description = "";
-                        $scope.errMessage = "";
-                        $scope.isErr = false;
-                    }).error(function(err) {
-                        $scope.message = "";
-                        $scope.isMsg = false;
-                        $scope.errMessage = err.message;
-                        $scope.isErr = true;
-                    });
-            }*/
+        
+        //This method will create new Location
+        $scope.createNewLocation = function() {
+            $scope.locationForm.loading = true;
+            console.log($scope.createLocationForm);
+            LocationDetails.createNewLocation($scope.createLocationForm)
+                .success(function(data) {
+                    $scope.isMsg = true;
+                    $scope.message = $filter('capitalize')($scope.createLocationForm.name) + " location successfully created"
+                    $scope.createLocationForm = "";                    
+                    $scope.errMessage = "";
+                    $scope.isErr = false;
+                }).error(function(err) {
+                    $scope.message = "";
+                    $scope.isMsg = false;
+                    $scope.errMessage = err.message;
+                    $scope.isErr = true;
+                });
+        }
 
 
 
