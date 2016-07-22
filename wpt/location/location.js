@@ -6,20 +6,23 @@ angular.module('wptApp.location', ['ngRoute'])
 .factory('LocationDetails', ['$http', function($http) {
     return {
         get: function() {
-                return $http.get('http://localhost:1337/location');
-            },
-            getLocation: function(locationId) {
-                return $http.get('http://localhost:1337/location/' + locationId);
-            },
-            /*updateProperty: function(propertyId, name, description) {
-                return $http.put('http://localhost:1337/property/' + propertyId, { name: name, description: description })
-            },*/
-            deleteLocation: function(locationId) {
-                return $http.delete('http://localhost:1337/location/' + locationId)
-            },
-            createNewLocation: function(locObject) {
-                return $http.post('http://localhost:1337/location', { name: locObject.name, display_name: locObject.display_name, location_region: locObject.location_region, location_browser: locObject.location_browser, active: (locObject.active ? locObject.active : false) })
-            }
+            return $http.get('http://localhost:1337/location');
+        },
+        getLocation: function(locationId) {
+            return $http.get('http://localhost:1337/location/' + locationId);
+        },
+        updateLocation: function(locationId, locObject) {
+            return $http.put('http://localhost:1337/location/' + locationId, { name: locObject.name, display_name: locObject.display_name, location_region: locObject.location_region.id, location_browser: locObject.location_browser.id, active: (locObject.active ? locObject.active : false) })
+        },
+        activeInactiveLocation: function(locationId, activeStatus) {
+            return $http.put('http://localhost:1337/location/' + locationId, { active: activeStatus })
+        },
+        deleteLocation: function(locationId) {
+            return $http.delete('http://localhost:1337/location/' + locationId)
+        },
+        createNewLocation: function(locObject) {
+            return $http.post('http://localhost:1337/location', { name: locObject.name, display_name: locObject.display_name, location_region: locObject.location_region, location_browser: locObject.location_browser, active: (locObject.active ? locObject.active : false) })
+        }
     }
 }])
 
@@ -142,21 +145,21 @@ angular.module('wptApp.location', ['ngRoute'])
 
             },
 
-            $scope.editLocationDetails = function(propertyId) {
-                $scope.propertyForm.loading = true;
-                LocationDetails.updateLocation(propertyId, $scope.selectedProperty.name, $scope.selectedLocation.description)
+            $scope.editLocationDetails = function(locationId) {
+                $scope.locationForm.loading = true;
+                LocationDetails.updateLocation(locationId, $scope.selectedLocation)
                     .success(function(data) {
                         $scope.isMsg = true;
-                        $scope.message = $filter('capitalize')($scope.selectedLocation.name) + " property successfully updated";
-                        $scope.propertyForm.loading = false;
+                        $scope.message = $filter('capitalize')($scope.selectedLocation.name) + " location successfully updated";
+                        $scope.locationForm.loading = false;
                         LocationDetails.get()
                             .success(function(data) {
-                                $scope.properties = data;
+                                $scope.locations = data;
                                 var allCount = [];
-                                angular.forEach($scope.properties, function(obj) {
+                                angular.forEach($scope.locations, function(obj) {
                                     allCount.push(obj.name);
                                 });
-                                $scope.allproperties = allCount;
+                                $scope.allLocations = allCount;
                             }).error(function(err) {
                                 $scope.message = "";
                                 $scope.isMsg = false;
@@ -171,43 +174,57 @@ angular.module('wptApp.location', ['ngRoute'])
                     });
             },
 
-            //This will check the Property already present or not
-            
-        $scope.validateLocationExist = function(locationName, field) {
-            if (field == "name") {
-                if ($scope.allLocations.indexOf(locationName) > -1) {
-                    $scope.isLocationExist = true;
+            //This will check the Location already present or not
+
+            $scope.validateLocationExist = function(locationName, field) {
+                if (field == "name") {
+                    if ($scope.allLocations.indexOf(locationName) > -1) {
+                        $scope.isLocationExist = true;
+                    } else {
+                        $scope.isLocationExist = false;
+                    }
                 } else {
-                    $scope.isLocationExist = false;
+                    if ($scope.allDisplayNames.indexOf(locationName) > -1) {
+                        $scope.isDisplayNameExist = true;
+                    } else {
+                        $scope.isDisplayNameExist = false;
+                    }
                 }
-            } else {
-                if ($scope.allDisplayNames.indexOf(locationName) > -1) {
-                    $scope.isDisplayNameExist = true;
-                } else {
-                    $scope.isDisplayNameExist = false;
-                }
+
+            },
+
+
+            //This method will create new Location
+            $scope.createNewLocation = function() {
+                $scope.locationForm.loading = true;
+                LocationDetails.createNewLocation($scope.createLocationForm)
+                    .success(function(data) {
+                        $scope.isMsg = true;
+                        $scope.message = $filter('capitalize')($scope.createLocationForm.name) + " location successfully created"
+                        $scope.createLocationForm = "";
+                        $scope.errMessage = "";
+                        $scope.isErr = false;
+                    }).error(function(err) {
+                        $scope.message = "";
+                        $scope.isMsg = false;
+                        $scope.errMessage = err.message;
+                        $scope.isErr = true;
+                    });
             }
 
-        },
-
-        
-        //This method will create new Location
-        $scope.createNewLocation = function() {
-            $scope.locationForm.loading = true;
-            console.log($scope.createLocationForm);
-            LocationDetails.createNewLocation($scope.createLocationForm)
-                .success(function(data) {
-                    $scope.isMsg = true;
-                    $scope.message = $filter('capitalize')($scope.createLocationForm.name) + " location successfully created"
-                    $scope.createLocationForm = "";                    
-                    $scope.errMessage = "";
-                    $scope.isErr = false;
-                }).error(function(err) {
-                    $scope.message = "";
-                    $scope.isMsg = false;
-                    $scope.errMessage = err.message;
-                    $scope.isErr = true;
-                });
+        $scope.toggleLocationActivity = function(locationId, locationName, locationActive) {
+            LocationDetails.activeInactiveLocation(locationId, locationActive)
+                    .success(function(data) {
+                        $scope.isMsg = true;
+                        $scope.message = $filter('capitalize')(locationName) + " location successfully updated"
+                        $scope.errMessage = "";
+                        $scope.isErr = false;
+                    }).error(function(err) {
+                        $scope.message = "";
+                        $scope.isMsg = false;
+                        $scope.errMessage = err.message;
+                        $scope.isErr = true;
+                    });
         }
 
 

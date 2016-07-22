@@ -3,6 +3,7 @@
 // Declare app level module which depends on views, and components
 angular.module('wptApp', [
   'ngRoute',
+  'toggle-switch',
   'wptApp.country',
   'wptApp.region',
   'wptApp.category',
