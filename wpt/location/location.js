@@ -22,6 +22,10 @@ angular.module('wptApp.location', ['ngRoute'])
         },
         createNewLocation: function(locObject) {
             return $http.post('http://localhost:1337/location', { name: locObject.name, display_name: locObject.display_name, location_region: locObject.location_region, location_browser: locObject.location_browser, active: (locObject.active ? locObject.active : false) })
+        },
+        searchLocations: function(searchParam) {
+            console.log(searchParam);
+            return $http.get('http://localhost:1337/location/searchLocation?q=' + searchParam);
         }
     }
 }])
@@ -210,10 +214,10 @@ angular.module('wptApp.location', ['ngRoute'])
                         $scope.errMessage = err.message;
                         $scope.isErr = true;
                     });
-            }
+            },
 
-        $scope.toggleLocationActivity = function(locationId, locationName, locationActive) {
-            LocationDetails.activeInactiveLocation(locationId, locationActive)
+            $scope.toggleLocationActivity = function(locationId, locationName, locationActive) {
+                LocationDetails.activeInactiveLocation(locationId, locationActive)
                     .success(function(data) {
                         $scope.isMsg = true;
                         $scope.message = $filter('capitalize')(locationName) + " location successfully updated"
@@ -225,8 +229,21 @@ angular.module('wptApp.location', ['ngRoute'])
                         $scope.errMessage = err.message;
                         $scope.isErr = true;
                     });
-        }
+            },
 
+            $scope.searchLocations = function() {
+                LocationDetails.searchLocations($scope.search)
+                    .success(function(data) {
+                        $scope.locations = data;
+                        $scope.errMessage = "";
+                        $scope.isErr = false;
+                    }).error(function(err) {
+                        $scope.message = "";
+                        $scope.isMsg = false;
+                        $scope.errMessage = err.message;
+                        $scope.isErr = true;
+                    })
+            }
 
 
     }

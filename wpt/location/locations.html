@@ -1,49 +1,52 @@
 <h1>Locations</h1>
 <div ng-if="isMsg" class="alert alert-info">
-  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  {{message}}
+    <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{message}}
 </div>
-
 <div ng-if="isErr" class="alert alert-danger">
-  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  {{errMessage}}
+    <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{errMessage}}
 </div>
 
 <a href="#/location/new">Create new location</a>
+
+<div class="control-group form-group col-md-12">
+
+    <label>Search Locations:- </label>
+    <input type="textbox" ng-model="search" id="search" name="search" placeholder="Search here" ng-change="searchLocations()">
+</div>
+
+
 <table id="locations" cellspacing="0" width="100%" datatable="" class="row-border hover">
-	<thead>
-	    <tr>
-	      <th>Name</th>
-	      <th>Display Name</th>
-	      <th>Region</th>
-	      <th>Browser</th>
-	      <th>Active</th>
-	      <th></th>
-	    </tr>
-  	</thead>
-  	<!--<tfoot>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Display Name</th>
+            <th>Region</th>
+            <th>Browser</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <!--<tfoot>
 	    <tr>
 	      <th>Name</th>
 	      <th></th>
 	    </tr>
   	</tfoot>-->
-	<tbody>
-		<tr ng-repeat="location in locations" >
-			<td>{{location.name | capitalize}}</td>
-			<td>{{location.display_name}}</td>
-			<td>{{location.location_region.name}}</td>
-			<td>{{location.location_browser.name}}</td>
-			<!--<td>{{location.active ? "Yes" : "No"}}</td>-->
-			<td><toggle-switch
-            ng-model="location.active"
-            on-label="Yes"
-              off-label="No"
-            class="switch-success" ng-change="toggleLocationActivity(location.id, location.name, location.active)">
-          </toggle-switch></td>
-			<td>
-				<a href="#/location/edit/{{location.id}}" class="btn btn-primary">Edit</a>
-				<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteLocation(location.id, location.name)">Delete</a>
-			</td>
-		</tr>			
-	</tbody>
+    <tbody>
+        <tr ng-repeat="location in locations">
+            <td>{{location.name | capitalize}}</td>
+            <td>{{location.display_name}}</td>
+            <td>{{location.location_region.name}}</td>
+            <td>{{location.location_browser.name}}</td>
+            <!--<td>{{location.active ? "Yes" : "No"}}</td>-->
+            <td>
+                <toggle-switch ng-model="location.active" on-label="Yes" off-label="No" class="switch-success" ng-change="toggleLocationActivity(location.id, location.name, location.active)">
+                </toggle-switch>
+            </td>
+            <td>
+                <a href="#/location/edit/{{location.id}}" class="btn btn-primary">Edit</a>
+                <a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteLocation(location.id, location.name)">Delete</a>
+            </td>
+        </tr>
+    </tbody>
 </table>
