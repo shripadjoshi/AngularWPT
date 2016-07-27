@@ -23,9 +23,8 @@ angular.module('wptApp.location', ['ngRoute'])
         createNewLocation: function(locObject) {
             return $http.post('http://localhost:1337/location', { name: locObject.name, display_name: locObject.display_name, location_region: locObject.location_region, location_browser: locObject.location_browser, active: (locObject.active ? locObject.active : false) })
         },
-        searchLocations: function(searchParam) {
-            console.log(searchParam);
-            return $http.get('http://localhost:1337/location/searchLocation?q=' + searchParam);
+        searchLocations: function(field, searchParam) {
+            return $http.get('http://localhost:1337/location/searchLocation?field='+field.toString()+'&q=' + searchParam);
         }
     }
 }])
@@ -232,7 +231,7 @@ angular.module('wptApp.location', ['ngRoute'])
             },
 
             $scope.searchLocations = function() {
-                LocationDetails.searchLocations($scope.search)
+                LocationDetails.searchLocations($scope.field,$scope.search)
                     .success(function(data) {
                         $scope.locations = data;
                         $scope.errMessage = "";
