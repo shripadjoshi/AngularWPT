@@ -233,7 +233,15 @@ angular.module('wptApp.location', ['ngRoute'])
             $scope.searchLocations = function() {
                 LocationDetails.searchLocations($scope.field,$scope.search)
                     .success(function(data) {
-                        $scope.locations = data;
+                        
+                        if(data.length > 0){
+                            $scope.locations = data;
+                            $scope.message = "";
+                            $scope.isMsg = false;
+                        }else{
+                            $scope.message = "No data found for selected criterion";
+                            $scope.isMsg = true;
+                        }
                         $scope.errMessage = "";
                         $scope.isErr = false;
                     }).error(function(err) {
