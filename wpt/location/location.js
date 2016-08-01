@@ -239,6 +239,7 @@ angular.module('wptApp.location', ['ngRoute'])
                             $scope.message = "";
                             $scope.isMsg = false;
                         }else{
+                            $scope.locations = "";
                             $scope.message = "No data found for selected criterion";
                             $scope.isMsg = true;
                         }

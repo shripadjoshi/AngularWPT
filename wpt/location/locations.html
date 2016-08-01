@@ -11,7 +11,7 @@
 <div class="control-group form-group col-md-12">
 
     <label>Search Locations:- </label>
-    <input type="textbox" ng-model="search" id="search" name="search" placeholder="Search here">
+    <input type="textbox" ng-model="search" id="search" name="search" placeholder="Search here" ng-change="searchLocations()">
     <label for="field"> Search For: </label>
     <select name="field" ng-model="field" ng-change="searchLocations()">
       <option value="">Select One</option>
