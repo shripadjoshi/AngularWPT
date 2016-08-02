@@ -1,0 +1,62 @@
+<h1>Urls</h1>
+<div ng-if="isMsg" class="alert alert-info">
+    <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{message}}
+</div>
+<div ng-if="isErr" class="alert alert-danger">
+    <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{errMessage}}
+</div>
+
+<a href="#/url/new">Create new url</a>
+
+<div class="control-group form-group col-md-12">
+
+    <label>Search Urls:- </label>
+    <input type="textbox" ng-model="search" id="search" name="search" placeholder="Search here" ng-change="searchUrls()">
+    <label for="field"> Search For: </label>
+    <select name="field" ng-model="field" ng-change="searchUrls()">
+      <option value="">Select One</option>
+      <option value="name">Name</option>
+      <option value="display_name">Display Name</option>
+      <option value="url_region">Region</option>
+      <option value="url_browser">Browser</option>
+      <option value="Active">Active</option>
+      <option value="In-Active">In-Active</option>
+    </select><br>
+</div>
+
+
+<table id="urls" cellspacing="0" width="100%" datatable="" class="row-border hover">
+    <thead>
+        <tr>
+            <th>URL</th>
+            <th>URL Alias</th>
+            <th>Region</th>
+            <th>Browser</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <!--<tfoot>
+	    <tr>
+	      <th>Name</th>
+	      <th></th>
+	    </tr>
+  	</tfoot>-->
+    <tbody>
+        <tr ng-repeat="url in urls">
+            <td>{{url.url}}</td>
+            <td>{{url.url_alias}}</td>
+            <td></td>
+            <td></td>
+            <!--<td>{{url.active ? "Yes" : "No"}}</td>-->
+            <td>
+                <toggle-switch ng-model="url.active" on-label="Yes" off-label="No" class="switch-success" ng-change="toggleUrlActivity(url.id, url.name, url.active)">
+                </toggle-switch>
+            </td>
+            <td>
+                <a href="#/url/edit/{{url.id}}" class="btn btn-primary">Edit</a>
+                <a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteUrl(url.id, url.name)">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>

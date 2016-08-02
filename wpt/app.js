@@ -10,7 +10,8 @@ angular.module('wptApp', [
   'wptApp.environment',
   'wptApp.browser',
   'wptApp.property',
-  'wptApp.location'
+  'wptApp.location',
+  'wptApp.url'
   
 ]).
 config(['$routeProvider', function($routeProvider) {

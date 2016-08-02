@@ -1,0 +1,66 @@
+<fieldset>
+    <div ng-if="isMsg" class="alert alert-success">
+        <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{message}}
+    </div>
+    <div ng-if="isErr" class="alert alert-danger">
+        <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{errMessage}}
+    </div>
+    <legend>
+        <h1>Create Url</h1></legend>
+    <div class="container-fluid">
+        <form id="create-url-form" name="createUrl">
+            <!-- N A M E -->
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':createUrl.url.$invalid && createUrl.url.$dirty}">
+                <label>URL</label>
+                <!-- For this input field make it required, and have a max length of 25 -->
+                <input type="text" class="form-control" placeholder="e.g. Url" name="url" ng-model="createUrlForm.url" required ng-blur="validateUrlExist(createUrlForm.url, 'url')">
+                <span class="help-block has-error" ng-if="createUrl.url.$dirty">
+            <span ng-show="createUrl.url.$error.required">Name is required.</span>
+                <span ng-show="isUrlExist" class="help-block">Url is already taken.</span>
+                </span>
+            </div>
+
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':createUrl.url_alias.$invalid && createUrl.url_alias.$dirty}">
+                <label>URL Alias</label>
+                <!-- For this input field make it required, and have a max length of 25 -->
+                <input type="text" class="form-control" placeholder="e.g. URL Alias" name="url_alias" ng-model="createUrlForm.url_alias" ng-maxlength="100">
+                <span class="help-block has-error" ng-if="createUrl.url_alias.$dirty">
+          
+                <span ng-show="createUrl.url_alias.$error.maxlength" class="help-block">The url alias cannot be more than 100 characters.</span>
+                </span>
+            </div>
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':createUrl.url_region.$invalid && createUrl.url_region.$dirty}">
+                <label>Region</label>
+                <select ng-model="createUrlForm.url_region" ng-options="region.id as region.name for region in regions" required>
+                    <option value="">Select region</option>
+                </select>
+                <span class="help-block has-error" ng-if="createUrl.url_region.$dirty">
+                    <span ng-show="createUrl.url_region.$error.required">
+                        Region is required.
+                    </span>
+                </span>
+            </div>
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':createUrl.url_browser.$invalid && createUrl.url_browser.$dirty}">
+                <label>Browser</label>
+                <select ng-model="createUrlForm.url_browser" ng-options="browser.id as browser.name for browser in browsers" required>
+                    <option value="">Select browser</option>
+                </select>
+                <span class="help-block has-error" ng-if="createUrl.url_browser.$dirty">
+                    <span ng-show="createUrl.url_browser.$error.required">
+                        Browser is required.
+                    </span>
+                </span>
+            </div>
+            <div class="control-group form-group col-md-12" ng-class="{'has-error':createUrl.active.$invalid && createUrl.active.$dirty}">
+                <label>Active</label>
+                <input type="checkbox" ng-model="createUrlForm.active" id="active" name="active">
+            </div>
+            <!-- Disable signup button until the form has no errors -->
+            <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createUrl.$invalid || isUrlExist || isDisplayNameExist" ng-click="createNewUrl()">
+                <span ng-hide="urlForm.loading">Create Url</span>
+                <span class="overlord-loading-spinner fa fa-spinner" ng-show="urlForm.loading"></span>
+                <span ng-show="urlForm.loading">Preparing your new url...</span>
+            </button>
+        </form>
+    </div>
+</fieldset>
